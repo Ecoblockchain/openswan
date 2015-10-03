@@ -4,7 +4,7 @@ config setup
     nat_traversal=no
     oe=off
     protostack=netkey
-    virtual_private=%v4:<%= node['openswan']['ppp_link_network'] %>/24,%v4:<%= node['openswan']['private_ip'] %>/32
+    virtual_private=%v4:10.140.111.0/24
 
 <%- if node['openswan']['tunnel']['connections'] &&
        node['openswan']['tunnel']['connections'].size > 0 -%>
@@ -12,18 +12,23 @@ config setup
 conn <%= connection %>
     authby=secret
     auto=start
-    phase2alg=3des-md5
-    keyexchange=ike
-    pfs=no
     type=tunnel
 
-    left=<%= node['openswan']['public_ip'] %>
-    leftsubnets={<%= node['openswan']['tunnel']['connections'][connection]['local']['subnets'].join(' ') %>}
+    left=%defaultroute
     leftnexthop=%defaultroute
+    leftid=<%= node['openswan']['public_ip'] %>
+    leftsubnet=<%= node['openswan']['tunnel']['connections'][connection]['local']['subnet'] %>
 
     right=<%= node['openswan']['tunnel']['connections'][connection]['remote']['ipaddress'] %>
-    rightsubnets={<%= node['openswan']['tunnel']['connections'][connection]['remote']['subnets'].join(' ') %>}
-    rightnexthop=%defaultroute
+    rightsubnet=<%= node['openswan']['tunnel']['connections'][connection]['remote']['subnet'] %>
 
+    ike=<%= node['openswan']['tunnel']['connections'][connection]['ike'] %>
+    phase2=<%= node['openswan']['tunnel']['connections'][connection]['phase2'] %>
+    phase2alg=<%= node['openswan']['tunnel']['connections'][connection]['phase2alg'] %>
+    
+    ikelifetime=<%= node['openswan']['tunnel']['connections'][connection]['ikelifetime'] %>
+    lifetime=<%= node['openswan']['tunnel']['connections'][connection]['lifetime'] %>
+
+    pfs=<%= node['openswan']['tunnel']['connections'][connection]['pfs'] %>
   <%- end -%>
 <%- end -%>

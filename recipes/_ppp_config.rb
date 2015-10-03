@@ -1,7 +1,7 @@
-file "/var/log/ppp-ipupdown.log" do
-  action :touch
-  not_if { File.exists?("/var/log/ppp-ipupdown.log") } # No touching!
-end
+#file "/var/log/ppp-ipupdown.log" do
+#  action :touch
+#  not_if { File.exists?("/var/log/ppp-ipupdown.log") } # No touching!
+#end
 
 execute "turn on ipv4 forwarding" do
   command "echo 1 > /proc/sys/net/ipv4/ip_forward"
@@ -17,13 +17,13 @@ bash "turn off redirects" do
   not_if "grep 0 /proc/sys/net/ipv4/conf/tunl0/send_redirects"
 end
 
-template "#{node['openswan']['xl2tpd_path']}/xl2tpd.conf" do
-  source "xl2tpd.conf.erb"
-  notifies :restart, "service[xl2tpd]"
-end 
+#template "#{node['openswan']['xl2tpd_path']}/xl2tpd.conf" do
+#  source "xl2tpd.conf.erb"
+#  notifies :restart, "service[xl2tpd]"
+#end 
 
-template "#{node['openswan']['ppp_path']}/options.xl2tpd" do
-  source "options.xl2tpd.erb"
-  notifies :restart, "service[xl2tpd]"
-end
+#template "#{node['openswan']['ppp_path']}/options.xl2tpd" do
+#  source "options.xl2tpd.erb"
+#  notifies :restart, "service[xl2tpd]"
+#nd
 
