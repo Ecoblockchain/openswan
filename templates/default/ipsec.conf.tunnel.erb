@@ -4,7 +4,7 @@ config setup
     nat_traversal=no
     oe=off
     protostack=netkey
-    virtual_private=%v4:10.140.111.0/24
+    virtual_private=<%= node['openswan']['tunnel']['virtual_private'] %>
 
 <%- if node['openswan']['tunnel']['connections'] &&
        node['openswan']['tunnel']['connections'].size > 0 -%>
